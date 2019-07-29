@@ -1,0 +1,19 @@
+{
+  "name": "armen-crudapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "koa": "^2.7.0",
+    "koa-bodyparser": "^4.2.1",
+    "koa-respond": "^2.1.0",
+    "koa-router": "^7.4.0",
+    "sequelize": "^5.10.1"
+  }
+}
