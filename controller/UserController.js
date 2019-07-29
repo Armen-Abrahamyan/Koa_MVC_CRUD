@@ -1,71 +1,85 @@
+const users = [
+    {
+        id: 1,
+        firstName: "Poxos",
+        lastName: "Poxosyan ",
+        age: 10
+    },
+    {
+        id: 2,
+        firstName: "Petros",
+        lastName: "Petrosyan",
+        age: 30
+    }
+];
+
 class UserController {
 
     static async getAllUsers(ctx, next) {
-        // try {
-        //     let student = await Student.find({});
-        //     ctx.body = student;
-        // } catch (err) {
-        //     ctx.status = err.status || 500;
-        //     ctx.body = err.message;
-        // }
 
         try {
-            ctx.body = ["1", "2", "3", "Hello world", {
-                name: "Aro",
-                age: 25
-            }];
-            console.log("mtelem")
+            ctx.body = users;
         } catch (e) {
-            ctx.status = err.status || 500;
-            ctx.body = err.message || 500;
-            console.log("error em tmel")
+            ctx.status = 500;
+            ctx.body = 500;
         }
-
     };
 
     static async createUser(ctx, next) {
         try {
-            let new_student = new Student(ctx.request.body);
-            await new_student.save();
-            ctx.body = new_student;
+            users.push(ctx.request.body);
+            ctx.body = users;
         } catch (err) {
             ctx.status = err.status || 500;
             ctx.body = err.message;
         }
     };
 
-
-    static async getUserById(ctx, next) {
+    static async getUserById(ctx, err, next) {
         try {
-            let student = await Student.findById(ctx.params.studentId);
-            ctx.body = student;
+            const userId = parseInt(ctx.params.id);
+            const theUser = users.filter(user => user.id === userId)[0];
+            if (theUser) {
+                ctx.body = theUser;
+            }
         } catch (error) {
             ctx.status = err.status || 500;
             ctx.body = err.message;
         }
     };
 
-    static async updateUser() {
+    static async updateUser(ctx, err, next) {
         try {
-            let student = await Student.findOneAndUpdate({_id: ctx.params.studentId}, ctx.request.body, {new: true});
-            ctx.body = student;
+            const userId = parseInt(ctx.params.id);
+            const theUser = users.filter(user => user.id === userId)[0];
+            if (theUser) {
+                const newUser = ctx.request.body;
+                theUser.firstName = newUser.firstName;
+                theUser.lastName = newUser.lastName;
+                theUser.age = newUser.age;
+                ctx.body = theUser;
+            }
         } catch (error) {
             ctx.status = err.status || 500;
             ctx.body = err.message;
         }
     }
 
-    static async deleteUser() {
+    static async deleteUser(ctx, err, next) {
         try {
-            let student = await Student.remove({_id: ctx.params.studentId});
-            ctx.body = {message: 'Student successfully deleted'};
+            const userId = parseInt(ctx.params.id);
+            const currentUser = users.filter(user => user.id === userId)[0];
+            if (currentUser) {
+                users.splice(userId, 1);
+                ctx.body = ("User successfully deleted");
+            } else {
+                ctx.body = "Not deleted";
+            }
         } catch (error) {
             ctx.status = err.status || 500;
             ctx.body = err.message;
         }
     }
-
-
 }
 
 module.exports = UserController;
